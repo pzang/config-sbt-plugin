@@ -1,0 +1,15 @@
+/RUNNING_PID
+/logs/
+/project/*-shim.sbt
+/project/project/
+/project/target/
+/target/
+.idea
+.sbtserver
+/project/.sbtserver.lock
+/ScalaConfigPluginTest/target/
+/ScalaConfigPluginTest/project/project/
+/ScalaConfigPluginTest/project/target/
+src/sbt-test/call-hello/target/
+src/sbt-test/call-hello/project/project/
+src/sbt-test/call-hello/project/target/
