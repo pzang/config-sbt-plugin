@@ -16,7 +16,10 @@ scalacOptions ++= Seq("-deprecation", "-feature")
 resolvers += Resolver.sonatypeRepo("snapshots")
 
 // Change this to another test framework if you prefer
-libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.4" % "test"
+libraryDependencies ++= Seq(
+  "com.typesafe" % "config" % "1.2.1",
+  "org.scalatest" %% "scalatest" % "2.2.4" % "test"
+)
 
 
 // Scripted - sbt plugin tests

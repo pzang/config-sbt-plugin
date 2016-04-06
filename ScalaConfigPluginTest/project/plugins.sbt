@@ -2,6 +2,8 @@ lazy val root = Project("plugins", file(".")).dependsOn(plugin)
 
 lazy val plugin = file("../").getCanonicalFile.toURI
 
+addSbtPlugin("me.pzang" %% "scala-config-sbt-plugin" % "1.0-SNAPSHOT")
+
 resolvers ++= Seq(
   Resolver.url("sbt snapshot plugins", url("http://repo.scala-sbt.org/scalasbt/sbt-plugin-snapshots"))(Resolver.ivyStylePatterns),
   Resolver.mavenLocal,

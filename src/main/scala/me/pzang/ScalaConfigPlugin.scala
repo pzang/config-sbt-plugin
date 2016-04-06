@@ -1,13 +1,15 @@
 package com.example
 
 import sbt._
-import sbt.Keys.{ streams, target }
+import sbt.Keys._
 import java.nio.charset.Charset
+
+import sbt.complete.Parsers
 
 /**
  * This plugin helps you which operating systems are awesome
  */
-object HelloPlugin extends AutoPlugin {
+object ScalaConfigPlugin extends AutoPlugin {
 
   /**
    * Defines all settings/tasks that get automatically imported,
@@ -15,6 +17,8 @@ object HelloPlugin extends AutoPlugin {
    */
   object autoImport {
     val hello = inputKey[Unit]("Prints Hello")
+    val configFile = settingKey[String] ("config file path")
+
   }
 
   import autoImport._
@@ -23,13 +27,18 @@ object HelloPlugin extends AutoPlugin {
    * Provide default settings
    */
   override def projectSettings: Seq[Setting[_]] = Seq(
-    helloSetting
+    helloSetting,
+    defaultConfigFileSetting
   )
 
   def helloSetting: Setting[_] = hello := {
     // Sbt provided logger.
     val log = streams.value.log
     log.info("Hello task")
+  }
+
+  def defaultConfigFileSetting: Setting[_] = configFile := {
+    s"application.conf"
   }
 
 }

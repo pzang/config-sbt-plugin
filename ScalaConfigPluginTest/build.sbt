@@ -1,1 +1,1 @@
-val root = (project in file(".")).enablePlugins(HelloPlugin)
+val root = (project in file(".")).enablePlugins(ScalaConfigPlugin)
