@@ -21,9 +21,7 @@ trait ConfigObjectComposer {
   def build(config: Config): String = {
     s"""package ${packageName} $RB
         |${buildConfigFile} $RB
-        |object ${topObjectName} {  $RB
-        | ${buildConfigSet(config.root().keySet(), config.root())} $RB
-        |} $RB
+        | ${buildConfigSet(topObjectName, config.root().keySet(), config.root())} $RB
        """.stripMargin
   }
 
@@ -31,14 +29,17 @@ trait ConfigObjectComposer {
     s""" lazy val config: com.typesafe.config.Config = com.typesafe.config.ConfigFactory.load(\" ${configFile} \")"""
   }
 
-  def buildConfigSet(keyset: java.util.Set[String], confObj: ConfigObject): String = {
-    keyset
+  def buildConfigSet(objName: String, keyset: java.util.Set[String], confObj: ConfigObject): String = {
+    val sb = new StringBuilder(s"""object ${objName} {  $RB""")
+    sb.append(keyset
       .map(k => buildFromObject(k, confObj.get(k)))
       .mkString(System.lineSeparator())
+    )
+    sb.append(s"""$RB}""")
+    sb.toString()
   }
 
   def buildFromObject(k: String, confVal: ConfigValue): String = {
-
     confVal.valueType match {
       case ConfigValueType.NULL =>
         buildNULL(k)
@@ -50,8 +51,10 @@ trait ConfigObjectComposer {
         buildString(k, confVal.unwrapped().asInstanceOf[String])
       case ConfigValueType.LIST =>
         buildList(k, confVal.unwrapped().asInstanceOf[java.util.List[Object]])
-      case ConfigValueType.OBJECT =>
-        ""
+      case ConfigValueType.OBJECT => {
+        val confObj = confVal.unwrapped().asInstanceOf[ConfigObject]
+        buildConfigSet(k,confObj.keySet(), confObj)
+      }
 
     }
   }
