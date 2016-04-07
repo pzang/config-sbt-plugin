@@ -1,1 +1,1 @@
-lazy val root = (project in file(".")).enablePlugins(HelloPlugin)
+lazy val root = (project in file(".")).enablePlugins(ScalaConfigPlugin)

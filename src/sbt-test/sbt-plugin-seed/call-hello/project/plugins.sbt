@@ -1,1 +1,1 @@
-addSbtPlugin("your.org" % "sbt-plugin-seed" % sys.props("project.version"))
+addSbtPlugin("me.pzang" % "scala-config-sbt-plugin" % sys.props("project.version"))
