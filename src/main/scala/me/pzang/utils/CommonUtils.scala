@@ -28,10 +28,6 @@ object CommonUtils {
   def isConfigList(list: List[Object]): Boolean =
    !isNullList(list) && list.forall(_.getClass equals classOf[Config])
 
-  //  def isConfigObjectList(list: List[Object]): Boolean = list.forall(_.getClass equals classOf[ConfigObject])
-
-  //  def isConfigListList(list: List[Object]): Boolean = list.forall(_.getClass equals classOf[ConfigList])
-
   def isNullList(list: List[Object]): Boolean = list.exists(_ == null)
 
   def getTypeTag[T: ru.TypeTag](obj: T) = ru.typeTag[T]

@@ -10,6 +10,6 @@
 /ScalaConfigPluginTest/target/
 /ScalaConfigPluginTest/project/project/
 /ScalaConfigPluginTest/project/target/
-src/sbt-test/call-hello/target/
-src/sbt-test/call-hello/project/project/
-src/sbt-test/call-hello/project/target/
+src/sbt-test/use-scala-config/target/
+src/sbt-test/use-scala-config/project/project/
+src/sbt-test/use-scala-config/project/target/

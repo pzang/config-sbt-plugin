@@ -13,7 +13,9 @@ object ScalaConfigPlugin extends AutoPlugin {
    */
   object autoImport {
     val configFile = settingKey[String] ("config file path")
-
+    val packageName = settingKey[String] ("package name in which this config object sites")
+    val topObjectName = settingKey[String] ("the top most object name as the entry point")
+    val generateConfigObject = taskKey[String]("the task generates config object in ")
   }
 
   import autoImport._

@@ -8,7 +8,8 @@ import scala.collection.JavaConverters._
 import utils.CommonUtils._
 
 /**
-  * Created by pzang on 4/5/16.
+  * Compose Config representation object source code,
+  * based on overrided packageName, topObjectName, and configFile
   */
 trait ConfigObjectComposer {
 
@@ -53,51 +54,53 @@ trait ConfigObjectComposer {
         buildList(k, confVal.unwrapped().asInstanceOf[java.util.List[Object]])
       case ConfigValueType.OBJECT => {
         val confObj = confVal.unwrapped().asInstanceOf[ConfigObject]
-        buildConfigSet(k,confObj.keySet(), confObj)
+        buildConfigSet(k, confObj.keySet(), confObj)
       }
 
     }
   }
 
   def buildFromBoolean(k: String, v: Boolean): String = {
-    s"def `${k}` = "
+    s"def `${k}` = ${v} $RB"
   }
 
   def buildNULL(k: String): String = {
-    s"def `${k}` = null "
+    s"def `${k}` = null $RB"
   }
 
   def buildNumber(k: String, v: Number): String = {
     v.doubleValue() % 1 == 0 match {
       // use double to ensure precision
       case true =>
-        s"def `${k} : Double = ${v.doubleValue()}"
+        s"def `${k}` : Double = ${v.doubleValue()} $RB"
       case false =>
         // use Long to avoid integer overflow
-        s"def `${k} : Long = ${v.longValue()}L"
+        s"def `${k}` : Long = ${v.longValue()}L  $RB"
     }
   }
 
   def buildString(k: String, v: String): String = {
-    s"""def `${k} : String = \"${v}\""""
+    s"""def `${k}` : String = \"${v}\" $RB"""
   }
 
+  val listTemplate: (String, String, String) => String =
+    (k, t, m) => s"""def `${k}` : scala.List[${t}] = config.${m}( \"${k}\") $RB"""
 
   def buildList(k: String, v: java.util.List[Object]): String = {
     val list = v.asScala.toList
     list match {
       case _ if isNullList(list) == true =>
-        s"""def `${k}` : scala.List[Object] = config.getAnyRefList( \"${k}\") """
+        listTemplate(k,"Object","getAnyRefList")
       case _ if isLongList(list) == true =>
-        s"""def `${k}` : scala.List[Long] = config.getLongList( \"${k}\") """
+        listTemplate(k,"Long","getLongList")
       case _ if isDoubleList(list) == true =>
-        s"""def `${k}` : scala.List[Double] = config.getDoubleList( \"${k}\") """
+        listTemplate(k,"Double","getDoubleList")
       case _ if isStringList(list) == true =>
-        s"""def `${k}` : scala.List[String] = config.getStringList( \"${k}\") """
+        listTemplate(k,"String","getStringList")
       case _ if isConfigList(list) == true =>
-        s"""def `${k}` : scala.List[com.typesafe.config.ConfigList] = config.getConfigList( \"${k}\") """
+        listTemplate(k,"com.typesafe.config.ConfigList","getConfigList") //TODO: further expand this to an actual list?
       case _ =>
-        s"""def `${k}` : scala.List[Object] = config.getObjectList( \"${k}\") """
+        listTemplate(k,"com.typesafe.config.ConfigObject","getObjectList") //TODO: further expand this as a list of object?
     }
   }
 
