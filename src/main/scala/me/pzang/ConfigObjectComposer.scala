@@ -86,6 +86,8 @@ trait ConfigObjectComposer {
   def buildList(k: String, v: java.util.List[Object]): String = {
     val list = v.asScala.toList
     list match {
+      case _ if isNullList(list) == true =>
+        s"""def `${k}` : scala.List[Object] = config.getAnyRefList( \"${k}\") """
       case _ if isLongList(list) == true =>
         s"""def `${k}` : scala.List[Long] = config.getLongList( \"${k}\") """
       case _ if isDoubleList(list) == true =>

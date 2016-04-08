@@ -13,21 +13,26 @@ object CommonUtils {
   def isLong(num: Number): Boolean = !isDouble(num)
 
   // TODO: change this to use reflection, travers class hierarchy to find least common super class
-  def isLongList(list: List[Object]): Boolean = list.forall(n => (n.getClass equals classOf[Number]) && (isLong(n.asInstanceOf[Number])))
+  def isLongList(list: List[Object]): Boolean =
+   !isNullList(list) && list.forall(n => (classOf[Number] isAssignableFrom n.getClass) && (isLong(n.asInstanceOf[Number])))
 
-  def isDoubleList(list: List[Object]): Boolean = list.forall(n => (n.getClass equals classOf[Number]) && (isDouble(n.asInstanceOf[Number])))
+  def isDoubleList(list: List[Object]): Boolean =
+   !isNullList(list) && list.forall(n => (classOf[Number] isAssignableFrom n.getClass) && (isDouble(n.asInstanceOf[Number])))
 
-  def isNumberList(list: List[Object]): Boolean = list.forall(_.getClass equals classOf[Number])
+  def isNumberList(list: List[Object]): Boolean =
+   !isNullList(list) && list.forall(_.getClass equals classOf[Number])
 
-  def isStringList(list: List[Object]): Boolean = list.forall(_.getClass equals classOf[String])
+  def isStringList(list: List[Object]): Boolean =
+    !isNullList(list) && list.forall(_.getClass equals classOf[String])
 
-  def isConfigList(list: List[Object]): Boolean = list.forall(_.getClass equals classOf[Config])
+  def isConfigList(list: List[Object]): Boolean =
+   !isNullList(list) && list.forall(_.getClass equals classOf[Config])
 
   //  def isConfigObjectList(list: List[Object]): Boolean = list.forall(_.getClass equals classOf[ConfigObject])
 
   //  def isConfigListList(list: List[Object]): Boolean = list.forall(_.getClass equals classOf[ConfigList])
 
-  def isNullList(list: List[Object]): Boolean = list.forall(_ == null)
+  def isNullList(list: List[Object]): Boolean = list.exists(_ == null)
 
   def getTypeTag[T: ru.TypeTag](obj: T) = ru.typeTag[T]
 
